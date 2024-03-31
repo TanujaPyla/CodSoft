@@ -1,0 +1,95 @@
+import json
+
+def load_tasks():
+    try:
+        with open("tasks.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+def save_tasks(tasks):
+    with open("tasks.json", "w") as file:
+        json.dump(tasks, file)
+
+def add_task(tasks):
+    title = input("Enter task name- ")
+    description = input("Enter description- ")
+    tasks.append({"title": title, "description": description, "done": False})
+
+def list_tasks(tasks):
+    if tasks:
+        for i, task in enumerate(tasks):
+            status = "Done" if task["done"] else "Not Done"
+            print(f"{i+1}. {task['title']} - {task['description']} [{status}]")
+    else:
+        print("No task")
+
+def update_task(tasks):
+    list_tasks(tasks)
+    try:
+        index = int(input("Enter index of update task- ")) - 1
+        if 0 <= index < len(tasks):
+            tasks[index]["title"] = input("Enter new title1- ")
+            tasks[index]["description"] = input("Enter new description1- ")
+            print("Task updated successfully.")
+        else:
+            print("Invalid index")
+    except ValueError:
+        print("Invalid input.Enter a number.")
+
+def mark_task_done(tasks):
+    list_tasks(tasks)
+    try:
+        index = int(input("Enter the index of the task to mark as done: ")) - 1
+        if 0 <= index < len(tasks):
+            tasks[index]["done"] = True
+            print("Task done.")
+        else:
+            print("Invalid index.")
+    except ValueError:
+        print("Invalid input.Enter a number.")
+
+def delete_task(tasks):
+    list_tasks(tasks)
+    try:
+        index = int(input("Enter the index of the task to delete: ")) - 1
+        if 0 <= index < len(tasks):
+            del tasks[index]
+            print("Task deleted")
+        else:
+            print("Invalid index")
+    except ValueError:
+        print("Invalid input.Enter a number.")
+
+def main():
+    tasks = load_tasks()
+    while True:
+        print("To Do List Menu")
+        print("1. Add Task")
+        print("2. List Tasks")
+        print("3. Update Task")
+        print("4. Mark Task as Done")
+        print("5. Delete Task")
+        print("6. Exit")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            add_task(tasks)
+        elif choice == "2":
+            list_tasks(tasks)
+        elif choice == "3":
+            update_task(tasks)
+        elif choice == "4":
+            mark_task_done(tasks)
+        elif choice == "5":
+            delete_task(tasks)
+        elif choice == "6":
+            save_tasks(tasks)
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 6.")
+
+if __name__ == "__main__":
+    main()
+
+
